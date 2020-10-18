@@ -130,7 +130,7 @@ public class SFileOperationsScreen {
 
         ImageView exportButtonImageView = new ImageView(new Image(IconConstant.faviconImage));
         Button exportButton = new Button("Export", exportButtonImageView);
-        exportButton.textProperty().bind(I18N.createStringBinding("button.exportReport"));
+        exportButton.textProperty().bind(I18N.createStringBinding("button.exportReport").concat("<Async>"));
         exportButton.setStyle("-fx-font-size: 14.0 pt");
         exportButton.prefWidthProperty().bind(stage.widthProperty());
         exportButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -220,7 +220,7 @@ public class SFileOperationsScreen {
             showFileContentError(e1.getClass() + ": " + e1.getMessage());
         }
 
-        resultListBox.getItems().add("Created report : " + studentName);
+        resultListBox.getItems().add("Created report : " + studentName + ". Time: " + java.util.Calendar.getInstance().getTime());
 
         return null;
     }

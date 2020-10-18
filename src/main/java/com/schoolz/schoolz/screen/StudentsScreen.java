@@ -12,6 +12,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -41,7 +43,7 @@ public class StudentsScreen{
     @Autowired
     StudentScreen studentScreen;
 
-    private ObservableList<SStudent> data;
+    private ObservableList<SStudent> data = FXCollections.observableArrayList();
     private ObservableList<SStudent> filteredData = FXCollections.observableArrayList();
     TableView<SStudent> table;
     TextField searchTextField;
@@ -51,25 +53,45 @@ public class StudentsScreen{
         menuBar.setCursor(Cursor.CLOSED_HAND);
         menuBar.setStyle("-fx-font-size: 14.0 pt");
 
+        List<SStudent> s = sStudentService.findAll();
+        data.addAll(s);
+
 
         Label searchTextLabel = new Label();
-        searchTextLabel.textProperty().bind(I18N.createStringBinding("other.searchText"));
+        searchTextLabel.textProperty().bind(I18N.createStringBinding("other.searchText").concat(" <").concat(I18N.createStringBinding("student.name").concat(",").concat(I18N.createStringBinding("student.surname")).concat(">")));
         searchTextLabel.setStyle("-fx-font-size: 14.0 pt");
         searchTextField = new TextField();
         searchTextField.setStyle("-fx-font-size: 14.0 pt");
 
-        searchTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                                String oldValue, String newValue) {
+        FilteredList<SStudent> filteredData = new FilteredList<>(data, p -> true);
 
-                updateFilteredData();
-            }
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(person -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                } else if (person.getSurname().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches last name.
+                }
+                return false; // Does not match.
+            });
         });
 
+        SortedList<SStudent> sortedData = new SortedList<>(filteredData);
+        table = new TableView<>();
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+        table.setItems(sortedData);
 
 
-        TableView<SStudent> table = createStudentsTable();
+
+        table = createStudentsTable();
         table.setStyle("-fx-font-size: 14.0 pt");
         table.prefHeightProperty().bind(stage.heightProperty());
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -96,18 +118,6 @@ public class StudentsScreen{
 
 
     private TableView<SStudent> createStudentsTable() {
-        data =  FXCollections.observableArrayList();
-        table = new TableView<>();
-        List<SStudent> s = sStudentService.findAll();
-        data.addAll(s);
-
-        data.addListener(new ListChangeListener<SStudent>() {
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends SStudent> change) {
-                updateFilteredData();
-            }
-        });
-
         TableColumn firstName = new TableColumn();
         firstName.textProperty().bind(I18N.createStringBinding("student.name"));
         firstName.setMinWidth(100);
@@ -175,47 +185,9 @@ public class StudentsScreen{
             });
             return row ;
         });
-        table.setItems(data);
+        //table.setItems(data);
         table.getColumns().addAll(firstName, lastName, studentNumber, gender, birthday, className, avgExamScore);
         return table;
     }
 
-
-
-    private void updateFilteredData() {
-        filteredData.clear();
-
-        for (SStudent p : data) {
-            if (matchesFilter(p)) {
-                filteredData.add(p);
-            }
-        }
-
-        // Must re-sort table after items changed
-        reapplyTableSortOrder();
-    }
-
-    private boolean matchesFilter(SStudent person) {
-        String filterString = searchTextField.getText();
-        if (filterString == null || filterString.isEmpty()) {
-            // No filter --> Add all.
-            return true;
-        }
-
-        String lowerCaseFilterString = filterString.toLowerCase();
-
-        if (person.getName().toLowerCase().indexOf(lowerCaseFilterString) != -1) {
-            return true;
-        } else if (person.getSurname().toLowerCase().indexOf(lowerCaseFilterString) != -1) {
-            return true;
-        }
-
-        return true; // Does not match
-    }
-
-    private void reapplyTableSortOrder() {
-        ArrayList<TableColumn<SStudent, ?>> sortOrder = new ArrayList<>(table.getSortOrder());
-        table.getSortOrder().clear();
-        table.getSortOrder().addAll(sortOrder);
-    }
 }
