@@ -43,8 +43,8 @@ public class StudentsScreen{
     @Autowired
     StudentScreen studentScreen;
 
-    private ObservableList<SStudent> data = FXCollections.observableArrayList();
-    private ObservableList<SStudent> filteredData = FXCollections.observableArrayList();
+    private ObservableList<SStudent> data;;
+    private FilteredList<SStudent>  filteredData;
     TableView<SStudent> table;
     TextField searchTextField;
 
@@ -54,6 +54,7 @@ public class StudentsScreen{
         menuBar.setStyle("-fx-font-size: 14.0 pt");
 
         List<SStudent> s = sStudentService.findAll();
+        data = FXCollections.observableArrayList();
         data.addAll(s);
 
 
@@ -63,7 +64,7 @@ public class StudentsScreen{
         searchTextField = new TextField();
         searchTextField.setStyle("-fx-font-size: 14.0 pt");
 
-        FilteredList<SStudent> filteredData = new FilteredList<>(data, p -> true);
+        filteredData = new FilteredList<>(data, p -> true);
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(person -> {
