@@ -7,9 +7,12 @@ import com.schoolz.schoolz.dao.SStudentDao;
 import com.schoolz.schoolz.entity.SStudent;
 import com.schoolz.schoolz.service.SStudentService;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 
@@ -37,10 +41,32 @@ public class StudentsScreen{
     @Autowired
     StudentScreen studentScreen;
 
+    private ObservableList<SStudent> data;
+    private ObservableList<SStudent> filteredData = FXCollections.observableArrayList();
+    TableView<SStudent> table;
+    TextField searchTextField;
+
     public Stage studentsStage(Stage stage){
         MenuBar menuBar = menuConstant.menuBar();
         menuBar.setCursor(Cursor.CLOSED_HAND);
         menuBar.setStyle("-fx-font-size: 14.0 pt");
+
+
+        Label searchTextLabel = new Label();
+        searchTextLabel.textProperty().bind(I18N.createStringBinding("other.searchText"));
+        searchTextLabel.setStyle("-fx-font-size: 14.0 pt");
+        searchTextField = new TextField();
+        searchTextField.setStyle("-fx-font-size: 14.0 pt");
+
+        searchTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                updateFilteredData();
+            }
+        });
+
 
 
         TableView<SStudent> table = createStudentsTable();
@@ -54,8 +80,11 @@ public class StudentsScreen{
         subLabel.setStyle("-fx-font-size: 14.0 pt");
         subLabel.setPrefHeight(55);
 
+        VBox vBoxGeneral = new VBox(searchTextLabel, searchTextField);
+        vBoxGeneral.setPadding(new Insets(10, 10, 10, 10));
 
-        VBox vBox = new VBox(menuBar, table, subLabel);
+        VBox vBox = new VBox(menuBar,vBoxGeneral, table, subLabel);
+
         Scene scene = new Scene(vBox, 900, 450);
 
         stage.titleProperty().bind(I18N.createStringBinding("application.title"));
@@ -67,9 +96,17 @@ public class StudentsScreen{
 
 
     private TableView<SStudent> createStudentsTable() {
-        TableView<SStudent> table = new TableView<>();
+        data =  FXCollections.observableArrayList();
+        table = new TableView<>();
         List<SStudent> s = sStudentService.findAll();
-        ObservableList<SStudent> data = FXCollections.observableArrayList(s);
+        data.addAll(s);
+
+        data.addListener(new ListChangeListener<SStudent>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends SStudent> change) {
+                updateFilteredData();
+            }
+        });
 
         TableColumn firstName = new TableColumn();
         firstName.textProperty().bind(I18N.createStringBinding("student.name"));
@@ -141,5 +178,44 @@ public class StudentsScreen{
         table.setItems(data);
         table.getColumns().addAll(firstName, lastName, studentNumber, gender, birthday, className, avgExamScore);
         return table;
+    }
+
+
+
+    private void updateFilteredData() {
+        filteredData.clear();
+
+        for (SStudent p : data) {
+            if (matchesFilter(p)) {
+                filteredData.add(p);
+            }
+        }
+
+        // Must re-sort table after items changed
+        reapplyTableSortOrder();
+    }
+
+    private boolean matchesFilter(SStudent person) {
+        String filterString = searchTextField.getText();
+        if (filterString == null || filterString.isEmpty()) {
+            // No filter --> Add all.
+            return true;
+        }
+
+        String lowerCaseFilterString = filterString.toLowerCase();
+
+        if (person.getName().toLowerCase().indexOf(lowerCaseFilterString) != -1) {
+            return true;
+        } else if (person.getSurname().toLowerCase().indexOf(lowerCaseFilterString) != -1) {
+            return true;
+        }
+
+        return true; // Does not match
+    }
+
+    private void reapplyTableSortOrder() {
+        ArrayList<TableColumn<SStudent, ?>> sortOrder = new ArrayList<>(table.getSortOrder());
+        table.getSortOrder().clear();
+        table.getSortOrder().addAll(sortOrder);
     }
 }

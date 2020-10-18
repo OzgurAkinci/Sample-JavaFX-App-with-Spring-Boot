@@ -22,4 +22,9 @@ public class SClassServiceImpl implements SClassService {
     public SClass findById(Integer id) {
         return sClassDao.findById(id).get();
     }
+
+    @Override
+    public SClass save(SClass sClass) {
+        return sClassDao.save(sClass);
+    }
 }

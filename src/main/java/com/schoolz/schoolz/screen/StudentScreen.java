@@ -65,11 +65,10 @@ public class StudentScreen {
                     new ComboBoxDTO("MR", "Mr"),
                     new ComboBoxDTO("MRS", "Mrs"));
 
-    private final ObservableList<SClass> classListData = FXCollections.observableArrayList();
-
     public Stage studentStage(Stage stage) throws IOException, BackingStoreException {
         HashMap configs = AppConstant.initializeBaseConfig();
 
+        ObservableList<SClass> classListData = FXCollections.observableArrayList();
         List<SClass> classList = sClassService.findAll();
         classList.forEach(c-> {
             classListData.add(c);
@@ -282,14 +281,14 @@ public class StudentScreen {
         return stage;
     }
 
-    private void save(SStudent student, Stage primaryStage) {
+    private void save(SStudent student_, Stage primaryStage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.titleProperty().bind(I18N.createStringBinding("message.title"));
         alert.headerTextProperty().bind(I18N.createStringBinding("message.areYouSure"));
         alert.showAndWait().ifPresent(rs -> {
             if (rs == ButtonType.OK) {
                 try {
-                    sStudentService.save(student);
+                    student = sStudentService.save(student_);
                     if(tableView != null)
                         tableView.refresh();
                     Alert alert1 = new Alert(Alert.AlertType.INFORMATION);

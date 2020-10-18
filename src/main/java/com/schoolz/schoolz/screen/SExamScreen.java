@@ -164,7 +164,7 @@ public class SExamScreen {
         return stage;
     }
 
-    private void save(SExam sExam, Stage primaryStage) {
+    private void save(SExam sExam_, Stage primaryStage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.titleProperty().bind(I18N.createStringBinding("message.title"));
         alert.headerTextProperty().bind(I18N.createStringBinding("message.areYouSure"));
@@ -172,7 +172,7 @@ public class SExamScreen {
             if (rs == ButtonType.OK) {
                 try {
                     //sExamClassDao.deleteB(sExam);
-                    sExamService.save(sExam);
+                    sExam = sExamService.save(sExam_);
                     if(tableView != null)
                         tableView.refresh();
                     Alert alert1 = new Alert(Alert.AlertType.INFORMATION);

@@ -128,7 +128,15 @@ public class SStudentScoreScreen {
                 }
                 sStudentScore.setsStudent(student_);
                 sStudentScore.setScore((studentScoreField.getText() == null || studentScoreField.getText().equals("")) ? 0 : Integer.valueOf(studentScoreField.getText()));
-                save(sStudentScore, stage);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.titleProperty().bind(I18N.createStringBinding("message.title"));
+                alert.headerTextProperty().bind(I18N.createStringBinding("message.areYouSure"));
+                alert.showAndWait().ifPresent(rs -> {
+                    if (rs == ButtonType.OK) {
+                        save(sStudentScore, stage);
+                    }
+                });
+
             }
         });
 
@@ -146,35 +154,28 @@ public class SStudentScoreScreen {
         return stage;
     }
 
-    private void save(SStudentExam sStudentScore, Stage primaryStage) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.titleProperty().bind(I18N.createStringBinding("message.title"));
-        alert.headerTextProperty().bind(I18N.createStringBinding("message.areYouSure"));
-        alert.showAndWait().ifPresent(rs -> {
-            if (rs == ButtonType.OK) {
-                try {
-                    sStudentExamService.save(sStudentScore);
-                    if(tableView != null)
-                        tableView.refresh();
-                    Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-                    alert1.titleProperty().bind(I18N.createStringBinding("message.title"));
-                    alert1.headerTextProperty().bind(I18N.createStringBinding("message.savedStudentExam"));
-                    alert1.showAndWait().ifPresent(rs1 -> {
-                        if (rs1 == ButtonType.OK) {
-                            //primaryStage.close();
-                        }
-                    });
-                }catch (Exception err){
-                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                    alert2.titleProperty().bind(I18N.createStringBinding("message.warning"));
-                    alert2.headerTextProperty().bind(I18N.createStringBinding("message.anyError"));
-                    alert2.setContentText(err.getMessage());
-                    alert2.showAndWait().ifPresent(rs2 -> {
-
-                    });
+    private void save(SStudentExam sStudentScore_, Stage primaryStage) {
+        try {
+            sStudentScore = sStudentExamService.save(sStudentScore_);
+            if(tableView != null)
+                tableView.refresh();
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+            alert1.titleProperty().bind(I18N.createStringBinding("message.title"));
+            alert1.headerTextProperty().bind(I18N.createStringBinding("message.savedStudentExam"));
+            alert1.showAndWait().ifPresent(rs1 -> {
+                if (rs1 == ButtonType.OK) {
+                    //primaryStage.close();
                 }
-            }
-        });
+            });
+        }catch (Exception err){
+            Alert alert2 = new Alert(Alert.AlertType.ERROR);
+            alert2.titleProperty().bind(I18N.createStringBinding("message.warning"));
+            alert2.headerTextProperty().bind(I18N.createStringBinding("message.anyError"));
+            alert2.setContentText(err.getMessage());
+            alert2.showAndWait().ifPresent(rs2 -> {
+
+            });
+        }
     }
 
     public SStudentExam getsStudentScore() {

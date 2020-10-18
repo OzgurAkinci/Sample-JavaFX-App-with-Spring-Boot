@@ -43,7 +43,7 @@ public class SStudent {
     @Column(name = "address")
     private String address;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "s_class_id", referencedColumnName = "id")
     private SClass sClass;
 

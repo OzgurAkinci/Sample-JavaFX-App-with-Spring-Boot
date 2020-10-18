@@ -78,7 +78,16 @@ public class SClassScreen {
 
                 sclass.setId(sclass.getId() == null ? null : sclass.getId());
                 sclass.setName((name == null || name.equals("")) ? null : name);
-                save(sclass, stage);
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.titleProperty().bind(I18N.createStringBinding("message.title"));
+                alert.headerTextProperty().bind(I18N.createStringBinding("message.areYouSure"));
+                alert.showAndWait().ifPresent(rs -> {
+                    if (rs == ButtonType.OK) {
+                        save(sclass, stage);
+                    }
+                });
+
             }
         });
 
@@ -96,35 +105,28 @@ public class SClassScreen {
         return stage;
     }
 
-    private void save(SClass sclass, Stage primaryStage) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.titleProperty().bind(I18N.createStringBinding("message.title"));
-        alert.headerTextProperty().bind(I18N.createStringBinding("message.areYouSure"));
-        alert.showAndWait().ifPresent(rs -> {
-            if (rs == ButtonType.OK) {
-                try {
-                    //sClassService.save(sclass);
-                    if(tableView != null)
-                        tableView.refresh();
-                    Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-                    alert1.titleProperty().bind(I18N.createStringBinding("message.title"));
-                    alert1.headerTextProperty().bind(I18N.createStringBinding("message.savedClass"));
-                    alert1.showAndWait().ifPresent(rs1 -> {
-                        if (rs1 == ButtonType.OK) {
-                            //primaryStage.close();
-                        }
-                    });
-                }catch (Exception err){
-                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                    alert2.titleProperty().bind(I18N.createStringBinding("message.warning"));
-                    alert2.headerTextProperty().bind(I18N.createStringBinding("message.anyError"));
-                    alert2.setContentText(err.getMessage());
-                    alert2.showAndWait().ifPresent(rs2 -> {
-
-                    });
+    private void save(SClass sclass_, Stage primaryStage) {
+        try {
+            sclass = sClassService.save(sclass_);
+            if(tableView != null)
+                tableView.refresh();
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+            alert1.titleProperty().bind(I18N.createStringBinding("message.title"));
+            alert1.headerTextProperty().bind(I18N.createStringBinding("message.savedClass"));
+            alert1.showAndWait().ifPresent(rs1 -> {
+                if (rs1 == ButtonType.OK) {
+                    //primaryStage.close();
                 }
-            }
-        });
+            });
+        }catch (Exception err){
+            Alert alert2 = new Alert(Alert.AlertType.ERROR);
+            alert2.titleProperty().bind(I18N.createStringBinding("message.warning"));
+            alert2.headerTextProperty().bind(I18N.createStringBinding("message.anyError"));
+            alert2.setContentText(err.getMessage());
+            alert2.showAndWait().ifPresent(rs2 -> {
+
+            });
+        }
     }
 
     public SClass getSclass() {

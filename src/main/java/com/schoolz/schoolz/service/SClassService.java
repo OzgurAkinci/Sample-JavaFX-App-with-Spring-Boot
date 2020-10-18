@@ -7,4 +7,5 @@ import java.util.List;
 public interface SClassService {
     List<SClass> findAll();
     SClass findById(Integer id);
+    SClass save(SClass sClass);
 }
