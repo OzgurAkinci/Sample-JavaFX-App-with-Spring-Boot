@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StudentReport" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36" uuid="43e8caf7-0039-494c-9db9-da623f3d8457">
+	<property name="ireport.zoom" value="1.6105100000000079"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="144"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="0.05" lineColor="#000000"/>
+			<topPen lineWidth="0.05"/>
+			<leftPen lineWidth="0.05"/>
+			<bottomPen lineWidth="0.05"/>
+			<rightPen lineWidth="0.05"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.05" lineColor="#000000"/>
+			<topPen lineWidth="0.05"/>
+			<leftPen lineWidth="0.05"/>
+			<bottomPen lineWidth="0.05"/>
+			<rightPen lineWidth="0.05"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.05" lineColor="#000000"/>
+			<topPen lineWidth="0.05"/>
+			<leftPen lineWidth="0.05"/>
+			<bottomPen lineWidth="0.05"/>
+			<rightPen lineWidth="0.05"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.05" lineColor="#000000"/>
+			<topPen lineWidth="0.05"/>
+			<leftPen lineWidth="0.05"/>
+			<bottomPen lineWidth="0.05"/>
+			<rightPen lineWidth="0.05"/>
+		</box>
+	</style>
+	<subDataset name="StudentExamDS" uuid="7090fe9b-75d5-4839-9e8d-bead4b25fae5">
+		<parameter name="studentId" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[id]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select ct.exam_code, avg(pe.score) from s_student_exam pe
+    left join s_exam ct
+        on (ct.id=pe.exam_id)
+where pe.student_id=$P{studentId}
+group by (ct.exam_code)]]>
+		</queryString>
+		<field name="exam_code" class="java.lang.String"/>
+		<field name="avg" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select s.name as name,
+       s.surname as surname,
+       s.student_number as studentNumber,
+       coalesce(avg(sse.score),0) as avg
+       from s_student s
+       left join s_student_exam sse on s.id = sse.student_id
+where s.id=$P{id}
+group by s.id]]>
+	</queryString>
+	<field name="name" class="java.lang.String"/>
+	<field name="surname" class="java.lang.String"/>
+	<field name="studentnumber" class="java.lang.String"/>
+	<field name="avg" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="262" splitType="Stretch">
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="1" width="523" height="26" backcolor="#FFFFFF" uuid="9bf3bd4e-786d-46a5-bc60-393c693412cb"/>
+				<box>
+					<pen lineWidth="0.05" lineColor="#000000"/>
+					<topPen lineWidth="0.0" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[STUDENT REPORT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="58" width="116" height="34" uuid="6751f425-a8b6-45fd-bfba-17ff64f9f6c1"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="92" width="116" height="34" uuid="369d7c9f-459b-48bf-bd16-618629499182"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Surname]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="126" width="116" height="34" uuid="75fcf53c-0831-42f0-b3fa-7f80c1226a16"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="160" width="116" height="34" uuid="76009853-e3ee-4cee-b1d0-4a0bad913c16"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Avarage]]></text>
+			</staticText>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement mode="Opaque" x="239" y="58" width="284" height="204" uuid="10cf557c-8c7d-4a00-bfb3-8a8dd003c77b"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="StudentExamDS" uuid="3817bf1c-0d55-4a64-af4f-32f50d4683e7">
+							<datasetParameter name="studentId">
+								<datasetParameterExpression><![CDATA[$P{id}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{exam_code}]]></keyExpression>
+					<valueExpression><![CDATA[$F{avg}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="0" y="31" width="523" height="27" uuid="a61fff39-85b8-40be-a2a0-e47f85dbb66b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date Of Report: " + new SimpleDateFormat("dd.MM.yyyy h:mm a").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="26" width="523" height="1" forecolor="#F0F0F0" uuid="8c4a5a18-fa51-4a32-82bd-27bdfe0c41e2"/>
+			</line>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="194" width="116" height="34" uuid="50c3a9ff-afb7-42fc-bf41-6999a69560f8"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="228" width="116" height="34" uuid="6afc54a4-33b6-430b-9be9-2c0624357d83"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="116" y="194" width="119" height="34" backcolor="#FFFFFF" uuid="31677e46-4150-4746-83ee-172360b89687"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="116" y="228" width="119" height="34" backcolor="#FFFFFF" uuid="65f51234-0aba-46b4-bd15-711b6d3cdc8d"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="116" y="58" width="119" height="34" forecolor="#000000" backcolor="#FFFFFF" uuid="4c42f2a3-eeee-4f29-aaac-fb75934897ba"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1254" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="116" y="92" width="119" height="34" forecolor="#000000" backcolor="#FFFFFF" uuid="3643c33b-9506-41db-83cc-4ba964b9e083"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1254" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{surname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="116" y="126" width="119" height="34" forecolor="#000000" backcolor="#FFFFFF" uuid="c8cc48d9-c3f7-481f-90b6-457b71fd7ec1"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1254" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{studentnumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="116" y="160" width="119" height="34" forecolor="#000000" backcolor="#FFFFFF" uuid="50076a50-8ba3-48df-8d9e-ee2b9c878e48"/>
+				<box>
+					<topPen lineWidth="0.05"/>
+					<leftPen lineWidth="0.05"/>
+					<bottomPen lineWidth="0.05"/>
+					<rightPen lineWidth="0.05"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1254" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{avg}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement style="table_TH" mode="Opaque" x="0" y="0" width="523" height="25" backcolor="#FFFFFF" uuid="bd4c461d-d8d4-4581-94ae-e77a68c43d32"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" pdfEncoding="Cp1254"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[STUDENT - EXAM REPORT]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="29" width="523" height="1" forecolor="#F0F0F0" uuid="49871a5b-e868-4c1c-a1a4-afe62d4ba26b"/>
+			</line>
+		</band>
+	</pageHeader>
+	<summary>
+		<band height="100" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" x="0" y="0" width="523" height="100" uuid="1af23c60-ddc9-4f69-97d9-6b2b464c388b"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="StudentExamDS" uuid="5f2b5649-74fe-4ab0-ab02-67e52c6e74db">
+						<datasetParameter name="studentId">
+							<datasetParameterExpression><![CDATA[$P{id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="65" uuid="101d570e-7ef0-43af-8217-1037ba16e141">
+						<jr:columnHeader style="table_CH" height="25" rowSpan="1">
+							<staticText>
+								<reportElement style="table_TH" x="0" y="0" width="65" height="25" uuid="1205d674-d201-4030-9443-c112381a9151"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Arial" pdfEncoding="Cp1254"/>
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
+								<text><![CDATA[Number]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="28" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="65" height="28" uuid="2ad6aeee-239c-4a85-a1b1-846d4af64e9a"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Arial"/>
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="307" uuid="84c4b19a-dfbb-41d0-9f1e-77a6b823df24">
+						<jr:columnHeader style="table_CH" height="25" rowSpan="1">
+							<staticText>
+								<reportElement style="table_TH" x="0" y="0" width="307" height="25" uuid="0f3872e7-4d70-4dcb-867d-e01be776cf8e"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Arial" pdfEncoding="Cp1254"/>
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
+								<text><![CDATA[Exam Code]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="28" rowSpan="1">
+							<textField isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="307" height="28" uuid="123a3968-cc04-4fe3-a036-ae9f2aba8ddc"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Arial"/>
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{exam_code}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="152" uuid="f1422d3f-ac9c-4d65-a955-88e062d1b7cd">
+						<jr:columnHeader style="table_CH" height="25" rowSpan="1">
+							<staticText>
+								<reportElement style="table_TH" x="0" y="0" width="152" height="25" uuid="aa632eaa-85c6-4be3-b5ed-e19afc97fb60"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Arial" pdfEncoding="Cp1254"/>
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
+								<text><![CDATA[Avarage]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="28" rowSpan="1">
+							<textField isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="152" height="28" uuid="68eb0595-28a8-4768-8df7-67d426bbf7b7"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Arial"/>
+									<paragraph leftIndent="5" rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{avg}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>
