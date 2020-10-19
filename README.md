@@ -2,7 +2,7 @@
 
 JavaFX School-Z Application With Spring Boot
 
-![grab-landing-page](https://s8.gifyu.com/images/JavaFX_SchoolZ_Application.md.gif)
+![grab-landing-page](https://gifyu.com/image/87MH)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
