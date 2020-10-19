@@ -1,10 +1,11 @@
 # Application
 
-Spring Boot 2 - OAuth Authentication Example
+JavaFX School-Z Application With Spring Boot
 
-## Usage
+## Database
 
 ```sql
+-- Create Database
 CREATE DATABASE "school-z" WITH OWNER = postgres ENCODING = 'UTF8' CONNECTION LIMIT = -1;
 -- Sequence
 create sequence s_class_id_seq INCREMENT 1 MINVALUE  1 MAXVALUE 9223372036854775807 START 88 CACHE 1;
