@@ -2,7 +2,7 @@
 
 JavaFX School-Z Application With Spring Boot
 
-[![Alt text for your video](doc/screenshot_youtube.PNG)](https://www.youtube.com/watch?v=VIDEO-ID "Put hover text here!")
+[![JavaFX_SchoolZ_Application.md.gif](https://s8.gifyu.com/images/JavaFX_SchoolZ_Application.md.gif)](https://gifyu.com/image/87MH)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
