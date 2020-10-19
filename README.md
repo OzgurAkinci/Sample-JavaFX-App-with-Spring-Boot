@@ -2,7 +2,7 @@
 
 JavaFX School-Z Application With Spring Boot
 
-[![Watch the video](https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg)](https://youtu.be/T-D1KVIuvjA)
+[![Alt text for your video](doc/screenshot_youtube.PNG)](https://www.youtube.com/watch?v=VIDEO-ID "Put hover text here!")
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
